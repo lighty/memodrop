@@ -16,7 +16,7 @@ class Memodrop
   private
 
   def access_token
-    ENV["ACCESS_TOKEN"]
+    ENV["DROPBOX_ACCESS_TOKEN"]
   end
 
   # 任意の日付以降に更新されたファイルを特定
