@@ -9,7 +9,7 @@ class Memodrop
 
   def main
     @memo_dir = get_from_dropbox
-    selected = select_file_after Time.new(2014,8,4,0,0) # todo test
+    selected = select_file_after (Time.now - 60*60*24) # todo test
     puts selected.map{|f|f["path"]}
   end
 
