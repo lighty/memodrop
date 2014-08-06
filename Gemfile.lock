@@ -6,7 +6,12 @@ GEM
     dotenv-deployment (0.0.2)
     dropbox-sdk (1.6.4)
       json
+    evernote-thrift (1.25.1)
+    evernote_oauth (0.2.3)
+      evernote-thrift
+      oauth (>= 0.4.1)
     json (1.8.1)
+    oauth (0.4.7)
 
 PLATFORMS
   ruby
@@ -14,3 +19,4 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   dropbox-sdk
+  evernote_oauth
