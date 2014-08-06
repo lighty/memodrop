@@ -10,7 +10,9 @@ class Memodrop
   def main
     @memo_dir = get_from_dropbox
     selected = select_file_after (Time.now - 60*60*24) # todo test
-    puts selected.map{|f|f["path"]}
+    #puts selected.map{|f| "#{f['path']} : "}
+    contents, metadata = @client.get_file_and_metadata(selected.first['path'])
+    { content: contents, filename: File.basename(metadata['path']) }
   end
 
   private
@@ -31,8 +33,9 @@ class Memodrop
     @client.metadata "/memo/"
   end
 
-  #contents, metadata = client.get_file_and_metadata('/memo/2014-03-30-study.md')
 end
 
 Dotenv.load
-Memodrop.new.main
+ret = Memodrop.new.main
+puts ret[:content]
+p ret[:filename]
