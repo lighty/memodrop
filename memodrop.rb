@@ -64,28 +64,37 @@ module Memodrop
       end
     end
 
-    def make_note(note_title, note_body, parent_notebook=nil)
+    def sync_note(note_title, note_body, parent_notebook=nil)
       n_body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
       n_body += "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">"
       n_body += "<en-note>#{note_body}</en-note>"
 
-      our_note = ::Evernote::EDAM::Type::Note.new
-      our_note.title = note_title
-      our_note.content = n_body
-
+      our_note = ::Evernote::EDAM::Type::Note.new title: note_title, content: n_body
       if parent_notebook && parent_notebook.guid
         our_note.notebookGuid = parent_notebook.guid
       end
+      selected_note = select_note(note_title)
 
       begin
-        note = @note_store.createNote(our_note)
+        if selected_note
+          our_note.guid = selected_note.guid
+          @note_store.updateNote(our_note)
+        else
+          @note_store.createNote(our_note)
+        end
       rescue ::Evernote::EDAM::Error::EDAMUserException => edue
         p edue
       rescue ::Evernote::EDAM::Error::EDAMNotFoundException => ednfe
         p ednfe
       end
+    end
 
-      note
+    def select_note(title)
+      filter = ::Evernote::EDAM::NoteStore::NoteFilter.new
+      filter.words = "intitle:#{title}"
+      spec = ::Evernote::EDAM::NoteStore::NotesMetadataResultSpec.new
+      spec.includeTitle = true
+      @note_store.findNotesMetadata(developer_token, filter, 0, 1, spec).notes.first
     end
 
     private
@@ -114,9 +123,8 @@ puts "connected dropbox"
 require 'cgi'
 str = CGI.escapeHTML(ret[:content].force_encoding("UTF-8"))
 content = GitHub::Markdown.render_gfm(str).gsub("<br>", "<br />").gsub("<hr>", "<hr />")
-#p content
 evernote = Memodrop::Evernote.new
-evernote.make_note(ret[:filename], content, evernote.select_notebook)
+evernote.sync_note(ret[:filename], content, evernote.select_notebook)
 puts "connected evernote"
 
 # TODO
