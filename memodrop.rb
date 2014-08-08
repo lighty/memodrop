@@ -11,12 +11,12 @@ end
 Dotenv.load
 files = Memodrop::Dropbox.new.main
 puts "connected dropbox"
-require 'cgi'
 files.each do |file|
   puts file[:filename]
-  str = CGI.escapeHTML(file[:content].force_encoding("UTF-8"))
+  str = file[:content].force_encoding("UTF-8")
   content = GitHub::Markdown.render_gfm(str).gsub("<br>", "<br />").gsub("<hr>", "<hr />").gsub("[ ] ", "<en-todo />").gsub("[x] ", "<en-todo checked='true' />")
   evernote = Memodrop::Evernote.new
+  p content
   evernote.sync_note(file[:filename], content, evernote.select_notebook)
 end
 puts "connected evernote"
