@@ -39,7 +39,7 @@ module Memodrop
     end
   
     def get_from_dropbox
-      @client.metadata "/memo/"
+      @client.metadata "/#{ENV['DIRNAME']}"
     end
   
   end
@@ -51,6 +51,17 @@ module Memodrop
         sandbox: false,
       )
       @note_store = client.note_store
+    end
+
+    def select_notebook
+      selected_notebooks = @note_store.listNotebooks.select do |notebook|
+        notebook.name == notebook_name
+      end
+      if selected_notebooks.empty?
+        create_notebook
+      else
+        selected_notebooks.first
+      end
     end
 
     def make_note(note_title, note_body, parent_notebook=nil)
@@ -83,15 +94,32 @@ module Memodrop
       ENV['EVERNOTE_DEVELOPER_TOKEN']
     end
 
+    def notebook_name
+      ENV["DIRNAME"]
+    end
+
+    def create_notebook
+      notebook = ::Evernote::EDAM::Type::Notebook.new 
+      notebook.name = notebook_name
+      @note_store.createNotebook developer_token, notebook
+    end
+
   end
 
 end
 
 Dotenv.load
 ret = Memodrop::Dropbox.new.main
-#Memodrop::Evernote.new.make_note(ret[:filename], ret[:content].force_encoding("UTF-8").nl2br)
+puts "connected dropbox"
 require 'cgi'
 str = CGI.escapeHTML(ret[:content].force_encoding("UTF-8"))
 content = GitHub::Markdown.render_gfm(str).gsub("<br>", "<br />").gsub("<hr>", "<hr />")
-p content
-Memodrop::Evernote.new.make_note(ret[:filename], content)
+#p content
+evernote = Memodrop::Evernote.new
+evernote.make_note(ret[:filename], content, evernote.select_notebook)
+puts "connected evernote"
+
+# TODO
+# ファイル名でevernoteのノート内検索して、あったら上書き
+# ディレクトリ名をノート名として、無かったらノート作成したりする （いまだとデフォルトノート)
+# デーモン化して1分おきに実行するようにする..
