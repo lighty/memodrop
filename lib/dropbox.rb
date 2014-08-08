@@ -1,3 +1,4 @@
+require 'dropbox_sdk'
 require 'dotenv'
 module Memodrop
   class Dropbox
