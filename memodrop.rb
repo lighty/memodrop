@@ -18,7 +18,7 @@ module Memodrop
   
     def main
       @memo_dir = get_from_dropbox
-      selected = select_file_after (Time.now - 60*60*24) # todo test
+      selected = select_file_after (Time.now - 60) # 1分以内に変更があったメモが対象
       #puts selected.map{|f| "#{f['path']} : "}
       contents, metadata = @client.get_file_and_metadata(selected.first['path'])
       { content: contents, filename: File.basename(metadata['path']) }
@@ -128,6 +128,4 @@ evernote.sync_note(ret[:filename], content, evernote.select_notebook)
 puts "connected evernote"
 
 # TODO
-# ファイル名でevernoteのノート内検索して、あったら上書き
-# ディレクトリ名をノート名として、無かったらノート作成したりする （いまだとデフォルトノート)
 # デーモン化して1分おきに実行するようにする..
