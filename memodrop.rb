@@ -122,7 +122,7 @@ ret = Memodrop::Dropbox.new.main
 puts "connected dropbox"
 require 'cgi'
 str = CGI.escapeHTML(ret[:content].force_encoding("UTF-8"))
-content = GitHub::Markdown.render_gfm(str).gsub("<br>", "<br />").gsub("<hr>", "<hr />")
+content = GitHub::Markdown.render_gfm(str).gsub("<br>", "<br />").gsub("<hr>", "<hr />").gsub("[ ] ", "<en-todo />").tap{|s| p s}.gsub("[x] ", "<en-todo checked='true' />")
 evernote = Memodrop::Evernote.new
 evernote.sync_note(ret[:filename], content, evernote.select_notebook)
 puts "connected evernote"
