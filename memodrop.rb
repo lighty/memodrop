@@ -2,6 +2,7 @@
 require 'dropbox_sdk'
 require 'evernote_oauth'
 require 'dotenv'
+require 'github/markdown'
 
 class String
   def nl2br
@@ -68,9 +69,9 @@ module Memodrop
       begin
         note = @note_store.createNote(our_note)
       rescue ::Evernote::EDAM::Error::EDAMUserException => edue
-        puts "EDAMUserException: #{edue}"
+        p edue
       rescue ::Evernote::EDAM::Error::EDAMNotFoundException => ednfe
-        puts "EDAMNotFoundException: Invalid parent notebook GUID"
+        p ednfe
       end
 
       note
@@ -88,4 +89,9 @@ end
 
 Dotenv.load
 ret = Memodrop::Dropbox.new.main
-Memodrop::Evernote.new.make_note(ret[:filename], ret[:content].force_encoding("UTF-8").nl2br)
+#Memodrop::Evernote.new.make_note(ret[:filename], ret[:content].force_encoding("UTF-8").nl2br)
+require 'cgi'
+str = CGI.escapeHTML(ret[:content].force_encoding("UTF-8"))
+content = GitHub::Markdown.render_gfm(str).gsub("<br>", "<br />").gsub("<hr>", "<hr />")
+p content
+Memodrop::Evernote.new.make_note(ret[:filename], content)
