@@ -1,5 +1,6 @@
 require 'dropbox_sdk'
 require 'dotenv'
+
 module Memodrop
   class Dropbox
     def initialize
@@ -7,17 +8,30 @@ module Memodrop
       @client = DropboxClient.new access_token
     end
   
-    def main
-      @memo_dir = get_from_dropbox
-      selected = select_file_after (Time.now - 60) # 1分以内に変更があったメモが対象
-      selected.map do |file|
-        contents, metadata = @client.get_file_and_metadata(file['path'])
-        puts file['path']
-        { content: contents, filename: File.basename(metadata['path']) }
-      end
+    def get_resent
+      get_contents {
+        select_file_after(Time.now - 60) # 1分以内に変更があったメモが対象
+      }
+    end
+
+    def get_resent_one
+      get_contents { [ @memo_dir["contents"].first ] }
     end
   
     private
+
+    def get_contents
+      @memo_dir = get_metadata
+      selected = yield
+      client = @client
+      selected.define_singleton_method(:each_contents) do |&block|
+        selected.each do |file|
+          contents, metadata = client.get_file_and_metadata(file['path'])
+          block.call contents, File.basename(metadata['path'])
+        end
+      end
+      selected
+    end
   
     def access_token
       ENV["DROPBOX_ACCESS_TOKEN"]
@@ -30,9 +44,14 @@ module Memodrop
         modified_time > target_time
       end
     end
-  
-    def get_from_dropbox
-      @client.metadata "/#{ENV['DIRNAME']}"
+
+    def get_metadata
+      @client.metadata target_directory
     end
+
+    def target_directory
+      "/#{ENV['DIRNAME']}"
+    end
+
   end
 end
