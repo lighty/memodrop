@@ -1,7 +1,7 @@
 require "rubygems"
 require "bundler/setup"
 require 'rspec'
-Dir[File.join(File.dirname(__FILE__), "..", "**/*.rb")].each{|f| require f }
+Dir[File.join(File.dirname(__FILE__), "..", "lib/**/*.rb")].each{|f| require f }
 
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience

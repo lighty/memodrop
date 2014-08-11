@@ -3,6 +3,7 @@ require 'dotenv'
 module Memodrop
   class Dropbox
     def initialize
+      Dotenv.load
       @client = DropboxClient.new access_token
     end
   
