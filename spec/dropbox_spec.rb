@@ -12,10 +12,9 @@ describe Dropbox do
   end
 
   it "can get" do
-    #expect(@dropbox.main).not_to be_nil
     selected = @dropbox.get_resent_one
-    # ループを行う、呼び出し元で指定したブロック内でevernoteとの通信をやりつつ(遅延評価)
-    # @clientは隠蔽したい
+    # ループを行う、呼び出し元で指定したブロック内で
+    # evernoteとの通信をやりつつ(遅延評価) @clientは隠蔽したい
     resetnt_one = nil
     selected.each_contents do |contents, filename|
       resetnt_one = contents
