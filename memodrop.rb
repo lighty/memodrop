@@ -9,15 +9,15 @@ class String
 end
 
 Dotenv.load
-files = Memodrop::Dropbox.new.main
+files = Memodrop::Dropbox.new.get_resent
 puts "connected dropbox"
-files.each do |file|
-  puts file[:filename]
-  str = file[:content].force_encoding("UTF-8")
+files.each_contents do |contents, filename|
+  puts filename
+  str = contents.force_encoding("UTF-8")
   content = GitHub::Markdown.render_gfm(str).gsub("<br>", "<br />").gsub("<hr>", "<hr />").gsub("[ ] ", "<en-todo />").gsub("[x] ", "<en-todo checked='true' />")
   evernote = Memodrop::Evernote.new
   p content
-  evernote.sync_note(file[:filename], content, evernote.select_notebook)
+  evernote.sync_note(filename, content, evernote.select_notebook)
 end
 puts "connected evernote"
 
