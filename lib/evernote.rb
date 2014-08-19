@@ -3,11 +3,22 @@ require 'evernote_oauth'
 module Memodrop
   class Evernote
     def initialize
+      Dotenv.load
       client = EvernoteOAuth::Client.new(
         token: developer_token,
         sandbox: false,
       )
       @note_store = client.note_store
+    end
+
+    def markdownize(content)
+      evernote_checkbox( GitHub::Markdown.render_gfm(content)
+                        .gsub("<br>", "<br />")
+                        .gsub("<hr>", "<hr />"))
+    end
+
+    def evernote_checkbox(content)
+      content.gsub("[ ] ", "<en-todo />").gsub("[x] ", "<en-todo checked='true' />")
     end
 
     def select_notebook
