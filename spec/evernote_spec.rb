@@ -1,4 +1,5 @@
 require "evernote"
+require "unindent"
 
 describe Evernote do
 
@@ -7,7 +8,7 @@ describe Evernote do
   end
 
   context "markdownize" do
-    subject(:content) do Memodrop::Evernote.evernote_checkbox <<-EOS
+    subject(:content) do Memodrop::Evernote.evernote_checkbox <<-EOS.unindent
         ## TODO
         - [ ] Task A
         - [x] Task B
@@ -15,10 +16,10 @@ describe Evernote do
     end
 
     it "hoge" do
-      expect(:content).to eq(<<-EOS)
+      expect(content).to eq(<<-EOS.unindent)
         ## TODO
-        - [ ] Task A
-        - [x] Task B
+        - <en-todo />Task A
+        - <en-todo checked='true' />Task B
       EOS
     end
   end

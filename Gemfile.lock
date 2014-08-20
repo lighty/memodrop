@@ -26,6 +26,7 @@ GEM
     rspec-mocks (3.0.3)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.3)
+    unindent (1.0)
 
 PLATFORMS
   ruby
@@ -36,3 +37,4 @@ DEPENDENCIES
   evernote_oauth
   github-markdown
   rspec
+  unindent
