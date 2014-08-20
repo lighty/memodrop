@@ -8,7 +8,7 @@ describe Dropbox do
 
   subject(:access_token) { @dropbox.send(:access_token) }
   it "get from dotenv" do
-    expect(:access_token).not_to be_nil
+    expect(access_token).not_to be_nil
   end
 
   it "can get" do
