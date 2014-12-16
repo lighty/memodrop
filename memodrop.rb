@@ -10,7 +10,7 @@ class String
 end
 
 Dotenv.load
-files = Memodrop::Dropbox.new.get_resent
+files = Memodrop::Dropbox.new(Memolist).get_resent
 puts "connected dropbox"
 files.each_contents do |contents, filename|
   puts filename
