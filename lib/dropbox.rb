@@ -1,6 +1,5 @@
 require 'dropbox_sdk'
 require 'dotenv'
-require "/Users/usr0600165/work/memodrop/config/memolist.rb"
 
 module Memodrop
   class Dropbox
