@@ -28,6 +28,7 @@ module Memodrop
       selected.define_singleton_method(:each_contents) do |&block|
         selected.each do |file|
           contents, metadata = client.get_file_and_metadata(file['path'])
+          contents = @config.convert contents
           block.call contents, File.basename(metadata['path'])
         end
       end
