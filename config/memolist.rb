@@ -1,13 +1,13 @@
 class Memolist
-  def directory 
+  def self.directory 
     "memo"
   end
 
-  def convert(str)
+  def self.convert(str)
     str
   end
 
-  def notebook
+  def self.notebook
     "memolist"
   end
 

@@ -3,7 +3,7 @@ require "dropbox"
 describe Dropbox do
 
   before do
-    @dropbox = Memodrop::Dropbox.new
+    @dropbox = Memodrop::Dropbox.new(Memolist)
   end
 
   subject(:access_token) { @dropbox.send(:access_token) }

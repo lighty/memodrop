@@ -1,10 +1,12 @@
 require 'dropbox_sdk'
 require 'dotenv'
+require "/Users/usr0600165/work/memodrop/config/memolist.rb"
 
 module Memodrop
   class Dropbox
-    def initialize
+    def initialize(config)
       Dotenv.load
+      @config = config
       @client = DropboxClient.new access_token
     end
   
@@ -50,7 +52,7 @@ module Memodrop
     end
 
     def target_directory
-      "/#{ENV['DIRNAME']}"
+      "/#{@config.directory}"
     end
 
   end
