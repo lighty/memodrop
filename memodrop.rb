@@ -24,7 +24,7 @@ configs.each do |config|
   files.each_contents do |contents, filename|
     puts filename
     str = contents.force_encoding("UTF-8")
-    evernote = Memodrop::Evernote.new(Memolist)
+    evernote = Memodrop::Evernote.new(config.classify.constantize)
     content = evernote.markdownize str
     p content
     evernote.sync_note(filename, content, evernote.select_notebook)
