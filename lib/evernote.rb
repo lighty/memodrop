@@ -17,7 +17,7 @@ module Memodrop
                         .gsub("<hr>", "<hr />"))
     end
 
-    def self.evernote_checkbox(content)
+    def evernote_checkbox(content)
       content.gsub("[ ] ", "<en-todo />").gsub("[x] ", "<en-todo checked='true' />")
     end
 
