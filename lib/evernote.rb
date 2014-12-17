@@ -2,13 +2,14 @@ require 'dotenv'
 require 'evernote_oauth'
 module Memodrop
   class Evernote
-    def initialize
+    def initialize(config)
       Dotenv.load
       client = EvernoteOAuth::Client.new(
         token: developer_token,
         sandbox: false,
       )
       @note_store = client.note_store
+      @config = config
     end
 
     def markdownize(content)
@@ -25,6 +26,7 @@ module Memodrop
       selected_notebooks = @note_store.listNotebooks.select do |notebook|
         notebook.name == notebook_name
       end
+
       if selected_notebooks.empty?
         create_notebook
       else
@@ -72,7 +74,7 @@ module Memodrop
     end
 
     def notebook_name
-      ENV["DIRNAME"]
+      "#{@config.notebook}"
     end
 
     def create_notebook
