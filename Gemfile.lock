@@ -1,6 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (4.1.8)
+      i18n (~> 0.6, >= 0.6.9)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.1)
+      tzinfo (~> 1.1)
     diff-lcs (1.2.5)
     dotenv (0.11.1)
       dotenv-deployment (~> 0.0.2)
@@ -12,7 +18,9 @@ GEM
       evernote-thrift
       oauth (>= 0.4.1)
     github-markdown (0.6.6)
+    i18n (0.6.11)
     json (1.8.1)
+    minitest (5.5.0)
     oauth (0.4.7)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
@@ -26,12 +34,16 @@ GEM
     rspec-mocks (3.0.3)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.3)
+    thread_safe (0.3.4)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
     unindent (1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   dotenv
   dropbox-sdk
   evernote_oauth
