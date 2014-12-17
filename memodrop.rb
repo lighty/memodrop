@@ -18,13 +18,14 @@ end
 
 Dotenv.load
 configs.each do |config|
+  config_class = config.classify.constantize
   puts "--#{config}--"
-  files = Memodrop::Dropbox.new(config.classify.constantize).get_resent
+  files = Memodrop::Dropbox.new(config_class).get_resent
   puts "connected dropbox"
   files.each_contents do |contents, filename|
     puts filename
     str = contents.force_encoding("UTF-8")
-    evernote = Memodrop::Evernote.new(config.classify.constantize)
+    evernote = Memodrop::Evernote.new(config_class)
     content = evernote.markdownize str
     p content
     evernote.sync_note(filename, content, evernote.select_notebook)
